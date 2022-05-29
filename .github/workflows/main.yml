@@ -62,6 +62,8 @@ jobs:
           pkg-config \
           ${NULL+}
 
+    - uses: actions/checkout@v2
+
     - name: Setup MSVC dependencies
       if: "matrix.platform.msvc"
       shell: pwsh
@@ -77,8 +79,6 @@ jobs:
       if: "matrix.platform.msvc"
       with:
         arch: x64
-
-    - uses: actions/checkout@v2
 
     - name: Check that versioning is consistent
       # We only need to run this once: arbitrarily use the Linux/CMake build

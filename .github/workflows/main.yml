@@ -38,7 +38,7 @@ jobs:
           ${{ matrix.platform.msys-env }}-ninja
           ${{ matrix.platform.msys-env }}-pkg-config
 
-    - name: Setup Macos dependencies
+    - name: Setup macOS dependencies
       if: runner.os == 'macOS'
       run: |
           brew install \
@@ -61,6 +61,22 @@ jobs:
           ninja-build \
           pkg-config \
           ${NULL+}
+
+    - name: Setup MSVC dependencies
+      if: "matrix.platform.msvc"
+      shell: pwsh
+      run: |
+        .github/fetch_sdl_vc.ps1
+        echo "SDL2_DIR=$Env:GITHUB_WORKSPACE/SDL2-devel-VC" >> $Env:GITHUB_ENV
+    - name: Setup Ninja for MSVC
+      if: "matrix.platform.msvc"
+      uses: ashutoshvarma/setup-ninja@master
+      with:
+        version: 1.10.2
+    - uses: ilammy/msvc-dev-cmd@v1
+      if: "matrix.platform.msvc"
+      with:
+        arch: x64
 
     - uses: actions/checkout@v2
 
